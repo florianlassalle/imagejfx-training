@@ -1,8 +1,8 @@
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/taskStyle.java
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/importantTask.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/ImportantTask.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/BasicTask.java
 /home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/FXMLController.java
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/taskType.java
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/task.java
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/greenTask.java
-/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/basicTask.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/TaskStyle.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/TaskType.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/Task.java
 /home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/MainApp.java
+/home/florian/Documents/master/Stage/exercices/imagejfx-training/toDoListv2/src/main/java/com/mycompany/todolistv2/GreenTask.java

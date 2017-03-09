@@ -1,9 +1,9 @@
-com/mycompany/todolistv2/greenTask.class
-com/mycompany/todolistv2/importantTask.class
-com/mycompany/todolistv2/basicTask.class
+com/mycompany/todolistv2/TaskType.class
+com/mycompany/todolistv2/BasicTask.class
 com/mycompany/todolistv2/FXMLController.class
-com/mycompany/todolistv2/taskStyle.class
-com/mycompany/todolistv2/task.class
+com/mycompany/todolistv2/Task.class
 com/mycompany/todolistv2/FXMLController$TaskListCell.class
-com/mycompany/todolistv2/taskType.class
+com/mycompany/todolistv2/ImportantTask.class
+com/mycompany/todolistv2/GreenTask.class
 com/mycompany/todolistv2/MainApp.class
+com/mycompany/todolistv2/TaskStyle.class

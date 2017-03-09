@@ -54,7 +54,7 @@ public class FXMLDocumentController implements Initializable {
         }
         
         else if (event.getSource()== btndelete){
-            ObservableList<CheckBox> boxes = list_view.getItems();
+            ObservableList<CheckBox> boxes = list_view.getItems();  
             for (CheckBox i : boxes){
                 System.out.println(i);
                 if (i.isSelected()){
