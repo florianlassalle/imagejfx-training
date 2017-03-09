@@ -16,7 +16,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -38,9 +40,13 @@ public class FXMLController extends AnchorPane {
     @FXML
     private ListView<task> listView;
     @FXML
-    private CheckBox importantTask;
+    private RadioButton importantTask;
     @FXML
-    private CheckBox greenTask;
+    private RadioButton greenTask;
+    @FXML
+    private RadioButton basicTask;
+    @FXML
+    final ToggleGroup taskGroup = new ToggleGroup();
     
     
     public FXMLController() throws IOException {
@@ -53,6 +59,12 @@ public class FXMLController extends AnchorPane {
         listView.getItems().add(new task("Finir le cour javaFX", true));
         
         listView.setCellFactory(this::createCell);
+        importantTask.setToggleGroup(taskGroup);
+        greenTask.setToggleGroup(taskGroup);
+        basicTask.setToggleGroup(taskGroup);
+        taskGroup.selectToggle(basicTask);
+
+        
         
     }
     

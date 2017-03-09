@@ -38,12 +38,8 @@ public class task {
             System.out.println("propety changed");
             });
         this.tasktype = tasktype;
-        if (tasktype == taskType.important){
-            this.style = new importantTask();
-        }
-        else if (tasktype == taskType.green){
-            this.style = new greenTask();
-        }
+        this.style = tasktype.getStyle();
+        
     }
 
 
@@ -55,8 +51,9 @@ public class task {
         selectedProperty.setValue(selected);
     }
 
-    public void setStyle(taskStyle style) {
-        this.style = style;
+    public void setType(taskType type) {
+        this.tasktype = type;
+        this.style = type.getStyle();
     }
     
     public boolean isSelected (){

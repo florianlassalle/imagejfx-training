@@ -10,6 +10,19 @@ package com.mycompany.todolistv2;
  * @author florian
  */
 public enum taskType {
-    important,
-    green,
+    basic(new basicTask()),
+    important(new importantTask()),
+    green(new greenTask());
+    
+    private taskStyle style = null;
+    
+    taskType(taskStyle style){
+        this.style=style;
+    }
+
+    public taskStyle getStyle() {
+        return style;
+    }
+    
 }
+
