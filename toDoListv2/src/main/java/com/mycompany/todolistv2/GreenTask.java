@@ -8,15 +8,17 @@ package com.mycompany.todolistv2;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
+import static javafx.scene.text.Font.font;
 
 /**
  *
  * @author florian
  */
-public class basicTask implements taskStyle{
-
+public class GreenTask implements TaskStyle{
     private Font fontSize = font(18);
-    private Color color = Color.web("black");
+    private Color color = Color.web("green");
     
 
     @Override
@@ -28,5 +30,4 @@ public class basicTask implements taskStyle{
     public Color getColor() {
         return color;
     }
-    
 }

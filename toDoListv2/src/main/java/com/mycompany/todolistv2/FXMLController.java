@@ -38,7 +38,7 @@ public class FXMLController extends AnchorPane {
     private TextField txttask;
     
     @FXML
-    private ListView<task> listView;
+    private ListView<Task> listView;
     @FXML
     private RadioButton importantTask;
     @FXML
@@ -56,7 +56,7 @@ public class FXMLController extends AnchorPane {
         loader.setController(this);
         loader.load();
         
-        listView.getItems().add(new task("Finir le cour javaFX", true));
+        listView.getItems().add(new Task("Finir le cour javaFX", true));
         
         listView.setCellFactory(this::createCell);
         importantTask.setToggleGroup(taskGroup);
@@ -68,7 +68,7 @@ public class FXMLController extends AnchorPane {
         
     }
     
-    private ListCell<task> createCell (ListView<task> task){
+    private ListCell<Task> createCell (ListView<Task> task){
         return new TaskListCell();
     }
     
@@ -82,21 +82,21 @@ public class FXMLController extends AnchorPane {
         String newTask = txttask.getText();
         
         if (importantTask.isSelected()){
-            listView.getItems().add(new task(newTask, true, taskType.important));
+            listView.getItems().add(new Task(newTask, true, TaskType.important));
         }
         else if (greenTask.isSelected()){
-            listView.getItems().add(new task(newTask, true, taskType.green));
+            listView.getItems().add(new Task(newTask, true, TaskType.green));
         }
         else{
-            listView.getItems().add(new task(newTask, true));
+            listView.getItems().add(new Task(newTask, true));
         }
-        //listView.getItems().add(new task(newTask, true));
+        //listView.getItems().add(new Task(newTask, true));
         txttask.clear();
     }
     
     @FXML
     private void deleteTask(){
-        List<task> boxes = listView
+        List<Task> boxes = listView
                     .getItems()
                     .stream()
                     .filter(ch-> ch.isSelected())
@@ -107,7 +107,7 @@ public class FXMLController extends AnchorPane {
 
     
     
-    private class TaskListCell extends ListCell<task> {
+    private class TaskListCell extends ListCell<Task> {
         
         CheckBox checkbox = new CheckBox();
 
@@ -117,7 +117,7 @@ public class FXMLController extends AnchorPane {
             
         }
 
-        private void onItemChanged(ObservableValue obs, task oldValue, task newValue) {
+        private void onItemChanged(ObservableValue obs, Task oldValue, Task newValue) {
             
             if(oldValue != null){
                 oldValue.getSelectedProperty().unbindBidirectional(checkbox.selectedProperty());

@@ -12,7 +12,7 @@ import javafx.scene.text.Font;
  *
  * @author florian
  */
-public interface taskStyle {
+public interface TaskStyle {
     public Font getFont();
     public Color getColor();
 }

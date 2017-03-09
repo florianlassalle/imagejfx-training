@@ -9,18 +9,18 @@ package com.mycompany.todolistv2;
  *
  * @author florian
  */
-public enum taskType {
-    basic(new basicTask()),
-    important(new importantTask()),
-    green(new greenTask());
+public enum TaskType {
+    basic(new BasicTask()),
+    important(new ImportantTask()),
+    green(new GreenTask());
     
-    private taskStyle style = null;
+    private TaskStyle style = null;
     
-    taskType(taskStyle style){
+    TaskType(TaskStyle style){
         this.style=style;
     }
 
-    public taskStyle getStyle() {
+    public TaskStyle getStyle() {
         return style;
     }
     

@@ -14,14 +14,14 @@ import javafx.scene.text.Font;
  *
  * @author florian
  */
-public class task {
+public class Task {
     
     String name;
     BooleanProperty selectedProperty = new SimpleBooleanProperty();
-    taskType tasktype;
-    protected taskStyle style = new basicTask();
+    TaskType tasktype;
+    protected TaskStyle style = new BasicTask();
 
-    public task(String name, boolean isSelected) {
+    public Task(String name, boolean isSelected) {
         this.name = name;
         selectedProperty.setValue(isSelected);
         
@@ -31,7 +31,7 @@ public class task {
         });
     }
 
-    public task(String name,boolean isSelected, taskType tasktype) {
+    public Task(String name,boolean isSelected, TaskType tasktype) {
         this.name = name;
         selectedProperty.setValue(isSelected);
         selectedProperty.addListener((obs,oldValue,newValue)->{
@@ -51,7 +51,7 @@ public class task {
         selectedProperty.setValue(selected);
     }
 
-    public void setType(taskType type) {
+    public void setType(TaskType type) {
         this.tasktype = type;
         this.style = type.getStyle();
     }
