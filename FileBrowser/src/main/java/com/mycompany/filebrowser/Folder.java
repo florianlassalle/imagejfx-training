@@ -5,15 +5,23 @@
  */
 package com.mycompany.filebrowser;
 
+import javafx.scene.image.Image;
+
 /**
  *
  * @author florian
  */
 public class Folder extends ItemFile{
+    private Image icon =  new Image("file:folder.png",32,0,false,false);
     
     public Folder(String name, String path,boolean isSelected) {
         super(name, path,isSelected);
     }
+
+    public Image getIcon() {
+        return icon;
+    }
+    
     
    
     

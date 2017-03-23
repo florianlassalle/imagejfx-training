@@ -7,12 +7,13 @@ package com.mycompany.filebrowser;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.scene.image.Image;
 
 /**
  *
  * @author florian
  */
-public class ItemFile implements Comparable<ItemFile>{
+public abstract class ItemFile implements Comparable<ItemFile>{
     
     private String name;
     private String path;
@@ -56,7 +57,9 @@ public class ItemFile implements Comparable<ItemFile>{
     public int compareTo(ItemFile o) {
         return this.getName().compareTo(o.getName());
     }
-
+    abstract Image getIcon();
+        
+    
     
     
 }

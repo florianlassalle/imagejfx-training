@@ -18,10 +18,12 @@ public interface FileService extends SciJavaService {
     
     void openFolder();
     void sortItems();
-    void searching();
-    public void selection(ObservableList<String> names);
+    void searching(String entry);
+    //public void selection(ObservableList<String> names);
     public List<ItemFile> getItemList();
     public String getCurrentRepository();
     public void open();
+    public void up();
+    //public void select();
     
 }

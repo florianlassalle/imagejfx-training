@@ -8,6 +8,7 @@ package com.mycompany.filebrowser;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.scijava.event.EventService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
@@ -26,17 +27,23 @@ public class AlphabeticSortingPlugin implements Sorting{
     @Override
     public void sort() {
         System.out.println("Sorting ^^");
-        /*
+        
         List<ItemFile> itemList = fileService.getItemList();
-        List<String> nameList = new ArrayList();
-        itemList.stream().forEach((item) -> {
-            nameList.add(item.getName());
-        });
-        Collections.sort(nameList);
-*/
-        List<ItemFile> itemList = fileService.getItemList();
-        Collections.sort(itemList);
-        eventService.publish(new ListUpdateEvent(itemList));
+        //List<String> nameList = new ArrayList();
+        List<ItemFile> list =itemList
+                .stream()
+                .filter(ch -> ch.getClass().equals(Folder.class))
+                .collect(Collectors.toList());
+        Collections.sort(list);
+        List<ItemFile> imagelist =itemList
+                .stream()
+                .filter(ch -> ch.getClass().equals(ImageFile.class))
+                .collect(Collectors.toList());
+        Collections.sort(imagelist);
+        
+        list.addAll(imagelist);
+        
+        eventService.publish(new ListUpdateEvent(list));
     }
     
 }

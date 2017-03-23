@@ -11,18 +11,27 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.WindowEvent;
 import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.SciJava;
@@ -44,9 +53,11 @@ public class BrowserControler extends AnchorPane{
         Context context;
     
     @FXML
-    private ListView<String> listView;
+    private ListView<ItemFile> listView;
     @FXML
     private ToolBar toolBar;
+    @FXML
+    private TextField textField;
     
 
     public BrowserControler() throws IOException {
@@ -62,10 +73,14 @@ public class BrowserControler extends AnchorPane{
         
         //Initialization
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        listView.setCellFactory(this::createCell);
         SortingToolBar sortingBar = new SortingToolBar(context);
         fileService.openFolder();
     }
 
+     private ListCell<ItemFile> createCell (ListView<ItemFile> item){
+        return new FileListCell();
+    }
     
     
     public void browseFile(){
@@ -74,13 +89,19 @@ public class BrowserControler extends AnchorPane{
     }
     @FXML
     public void searchFile(){
-        // appel au service
-        // affichage sur la listView
+        fileService.searching(textField.getText());
+        //textField.clear();
     }
+    @FXML
+    public void up(){
+        fileService.up();
+    }
+    /*
     @FXML
     public void click(){
         fileService.selection(listView.getSelectionModel().getSelectedItems());
     }
+    */
     @FXML
     public void open () throws IOException{
         System.out.println("prout");
@@ -98,12 +119,55 @@ public class BrowserControler extends AnchorPane{
                     .stream()
                     .forEach((file) -> {
                     
-                    listView.getItems().add(file.getName());
+                    listView.getItems().add(file);
                     }));
     }
     
     
-     
+      
+    private class FileListCell extends ListCell<ItemFile> {
+        /*
+        Ici on definis comment la vue doit afficher les tache, 
+        */
+        HBox hbox;
+        CheckBox checkbox = new CheckBox();
+       
+
+        public FileListCell() {
+            super();
+            itemProperty().addListener(this::onItemChanged);
+            
+        }
+
+        private void onItemChanged(ObservableValue obs, ItemFile oldValue, ItemFile newValue) {
+            
+            if(oldValue != null){
+                oldValue.selectedProperty().unbindBidirectional(checkbox.selectedProperty());
+            }
+            
+            if(newValue == null){
+                setGraphic(null);
+            }
+            else {
+                
+                //Image depIcon =  new Image("file:folder.png",true);  
+                CheckBox checkbox = new CheckBox();
+  
+                hbox = new HBox();  
+  
+  
+                Pane pane = new Pane();  
+                pane.setMinWidth(5);  
+
+
+                hbox.getChildren().addAll(new ImageView(newValue.getIcon()), pane, checkbox);  
+                newValue.selectedProperty().bindBidirectional(checkbox.selectedProperty());
+                checkbox.setText(newValue.getName());
+                setGraphic(hbox);  
+              
+            }
+        }
+    }
     
     public class SortingToolBar extends ToolBar{
         
@@ -135,6 +199,12 @@ public class BrowserControler extends AnchorPane{
         public void applyPlugin(Sorting plugin){
             plugin.sort();
         }
+    }
+    
+    public class RightClickMenu extends ListView<ItemFile>{
+        ContextMenu contextMenu = new ContextMenu();
+        
+        
     }
     
     
