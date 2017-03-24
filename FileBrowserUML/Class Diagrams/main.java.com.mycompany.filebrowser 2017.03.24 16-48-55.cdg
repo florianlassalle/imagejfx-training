@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="main.java.com.mycompany.filebrowser">
+  <ClassDiagramComponents>
+    <Class name="BrowserControler" package="com.mycompany.filebrowser" visibility="public" xPosition="20.0" yPosition="20.0">
+      <Fields>
+        <Field name="fileService" type="FileService" visibility="package"/>
+        <Field name="context" type="Context" visibility="package"/>
+        <Field name="listView" type="ListView&lt;ItemFile&gt;" visibility="private"/>
+        <Field name="sortMenu" type="MenuButton" visibility="private"/>
+        <Field name="textField" type="TextField" visibility="private"/>
+        <Field name="contextMenu" type="ContextMenu" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public"/>
+      </Constructors>
+      <Methods>
+        <Method name="createCell" returnType="ListCell&lt;ItemFile&gt;" visibility="private">
+          <Argument type="ListView&lt;ItemFile&gt;" name="item"/>
+        </Method>
+        <Method name="searchFile" returnType="void" visibility="public"/>
+        <Method name="up" returnType="void" visibility="public"/>
+        <Method name="click" returnType="void" visibility="public">
+          <Argument type="MouseEvent" name="mouseEvent"/>
+        </Method>
+        <Method name="open" returnType="void" visibility="public"/>
+        <Method name="properties" returnType="void" visibility="public"/>
+        <Method name="onUpdateEvent" returnType="void" visibility="public">
+          <Argument type="ListUpdateEvent" name="event"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="FileServicePlugin" package="com.mycompany.filebrowser" visibility="public" xPosition="699.0" yPosition="586.0">
+      <Fields>
+        <Field name="eventService" type="EventService" visibility="package"/>
+        <Field name="itemList" type="List&lt;ItemFile&gt;" visibility="package"/>
+        <Field name="currentRepository" type="String" visibility="package"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="openFolder" returnType="void" visibility="public"/>
+        <Method name="openFolder" returnType="void" visibility="public">
+          <Argument type="String" name="path"/>
+        </Method>
+        <Method name="createFile" returnType="void" visibility="private">
+          <Argument type="File" name="item"/>
+        </Method>
+        <Method name="isImage" returnType="boolean" visibility="private">
+          <Argument type="File" name="file"/>
+        </Method>
+        <Method name="sortItems" returnType="void" visibility="public"/>
+        <Method name="searching" returnType="void" visibility="public">
+          <Argument type="String" name="entry"/>
+        </Method>
+        <Method name="open" returnType="void" visibility="public"/>
+        <Method name="selection" returnType="void" visibility="public">
+          <Argument type="ObservableList&lt;ItemFile&gt;" name="names"/>
+        </Method>
+        <Method name="up" returnType="void" visibility="public"/>
+        <Method name="getItemList" returnType="List&lt;ItemFile&gt;" visibility="public"/>
+        <Method name="getCurrentRepository" returnType="String" visibility="public"/>
+        <Method name="informations" returnType="String" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="AlphabeticSortingPlugin" package="com.mycompany.filebrowser" visibility="public" xPosition="-23.0" yPosition="717.0">
+      <Fields>
+        <Field name="fileService" type="FileService" visibility="package"/>
+        <Field name="eventService" type="EventService" visibility="package"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="sort" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="MainFileBrowser" package="com.mycompany.filebrowser" visibility="public" xPosition="1639.0" yPosition="769.0">
+      <Fields/>
+      <Constructors/>
+      <Methods>
+        <Method name="start" returnType="void" visibility="public">
+          <Argument type="Stage" name="stage"/>
+        </Method>
+        <Method name="main" returnType="void" visibility="public" isStatic="true">
+          <Argument type="String[]" name="args"/>
+        </Method>
+      </Methods>
+    </Class>
+    <Class name="ListUpdateEvent" package="com.mycompany.filebrowser" visibility="public" xPosition="994.0" yPosition="20.0">
+      <Fields>
+        <Field name="itemList" type="List&lt;ItemFile&gt;" visibility="public" isFinal="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="List&lt;ItemFile&gt;" name="itemList"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getItemList" returnType="List&lt;ItemFile&gt;" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="Folder" package="com.mycompany.filebrowser" visibility="public" xPosition="1165.0" yPosition="201.0">
+      <Fields>
+        <Field name="icon" type="Image" visibility="private" isStatic="true"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="name"/>
+          <Argument type="String" name="path"/>
+          <Argument type="boolean" name="isSelected"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getIcon" returnType="Image" visibility="public"/>
+        <Method name="getSize" returnType="long" visibility="package"/>
+        <Method name="getDateModification" returnType="FileTime" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="SizeSortingPlugin" package="com.mycompany.filebrowser" visibility="public" xPosition="424.0" yPosition="717.0">
+      <Fields>
+        <Field name="fileService" type="FileService" visibility="package"/>
+        <Field name="eventService" type="EventService" visibility="package"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="sort" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ImageFile" package="com.mycompany.filebrowser" visibility="public" xPosition="1133.0" yPosition="433.0">
+      <Fields>
+        <Field name="icon" type="Image" visibility="private" isStatic="true"/>
+        <Field name="size" type="long" visibility="private"/>
+        <Field name="dateModification" type="FileTime" visibility="private"/>
+        <Field name="propeties" type="String" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="name"/>
+          <Argument type="String" name="path"/>
+          <Argument type="boolean" name="isSelected"/>
+        </Constructor>
+        <Constructor visibility="public">
+          <Argument type="String" name="name"/>
+          <Argument type="String" name="path"/>
+          <Argument type="boolean" name="isSelected"/>
+          <Argument type="long" name="size"/>
+          <Argument type="FileTime" name="dateModification"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getSize" returnType="long" visibility="public"/>
+        <Method name="getDateModification" returnType="FileTime" visibility="public"/>
+        <Method name="getPropeties" returnType="String" visibility="public"/>
+        <Method name="getIcon" returnType="Image" visibility="public"/>
+      </Methods>
+    </Class>
+    <Class name="ItemFile" package="com.mycompany.filebrowser" visibility="public" isAbstract="true" xPosition="534.0" yPosition="109.0">
+      <Fields>
+        <Field name="name" type="String" visibility="private"/>
+        <Field name="path" type="String" visibility="private"/>
+        <Field name="selectedProperty" type="BooleanProperty" visibility="private"/>
+        <Field name="size" type="long" visibility="private"/>
+      </Fields>
+      <Constructors>
+        <Constructor visibility="public">
+          <Argument type="String" name="name"/>
+          <Argument type="String" name="path"/>
+          <Argument type="boolean" name="isSelected"/>
+        </Constructor>
+      </Constructors>
+      <Methods>
+        <Method name="getName" returnType="String" visibility="public"/>
+        <Method name="getPath" returnType="String" visibility="public"/>
+        <Method name="selectedProperty" returnType="BooleanProperty" visibility="public"/>
+        <Method name="setSelected" returnType="void" visibility="public">
+          <Argument type="Boolean" name="selected"/>
+        </Method>
+        <Method name="getSelectedProperty" returnType="BooleanProperty" visibility="public"/>
+        <Method name="isSelected" returnType="Boolean" visibility="public"/>
+        <Method name="compareTo" returnType="int" visibility="public">
+          <Argument type="ItemFile" name="o"/>
+        </Method>
+        <Method name="getIcon" returnType="Image" visibility="package" isAbstract="true"/>
+        <Method name="getSize" returnType="long" visibility="package" isAbstract="true"/>
+        <Method name="getDateModification" returnType="FileTime" visibility="public" isAbstract="true"/>
+      </Methods>
+    </Class>
+    <Interface name="FileService" package="com.mycompany.filebrowser" visibility="public" xPosition="99.0" yPosition="398.0">
+      <Methods>
+        <Method name="openFolder" returnType="void" visibility="package"/>
+        <Method name="sortItems" returnType="void" visibility="package"/>
+        <Method name="searching" returnType="void" visibility="package">
+          <Argument type="String" name="entry"/>
+        </Method>
+        <Method name="selection" returnType="void" visibility="public">
+          <Argument type="ObservableList&lt;ItemFile&gt;" name="names"/>
+        </Method>
+        <Method name="getItemList" returnType="List&lt;ItemFile&gt;" visibility="public"/>
+        <Method name="getCurrentRepository" returnType="String" visibility="public"/>
+        <Method name="open" returnType="void" visibility="public"/>
+        <Method name="up" returnType="void" visibility="public"/>
+        <Method name="informations" returnType="String" visibility="public"/>
+      </Methods>
+    </Interface>
+    <Interface name="Sorting" package="com.mycompany.filebrowser" visibility="public" xPosition="232.0" yPosition="863.0">
+      <Methods>
+        <Method name="sort" returnType="void" visibility="public"/>
+      </Methods>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="fileService" source="com.mycompany.filebrowser.SizeSortingPlugin" target="com.mycompany.filebrowser.FileService" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="com.mycompany.filebrowser.BrowserControler" target="com.mycompany.filebrowser.ListUpdateEvent" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="itemList" source="com.mycompany.filebrowser.FileServicePlugin" target="com.mycompany.filebrowser.ItemFile" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;ItemFile&gt;"/>
+    <HasRelation name="listView" source="com.mycompany.filebrowser.BrowserControler" target="com.mycompany.filebrowser.ItemFile" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="ListView&lt;ItemFile&gt;"/>
+    <HasRelation name="fileService" source="com.mycompany.filebrowser.AlphabeticSortingPlugin" target="com.mycompany.filebrowser.FileService" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="com.mycompany.filebrowser.AlphabeticSortingPlugin" target="com.mycompany.filebrowser.Sorting"/>
+    <HasRelation name="itemList" source="com.mycompany.filebrowser.ListUpdateEvent" target="com.mycompany.filebrowser.ItemFile" type="Aggregation" sourceCardinality="1..1" targetCardinality="0..*" collectionType="List&lt;ItemFile&gt;"/>
+    <UseRelation source="com.mycompany.filebrowser.ItemFile" target="com.mycompany.filebrowser.ItemFile" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="com.mycompany.filebrowser.FileServicePlugin" target="com.mycompany.filebrowser.FileService"/>
+    <UseRelation source="com.mycompany.filebrowser.FileServicePlugin" target="com.mycompany.filebrowser.ItemFile" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="fileService" source="com.mycompany.filebrowser.BrowserControler" target="com.mycompany.filebrowser.FileService" type="Aggregation" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="com.mycompany.filebrowser.ImageFile" target="com.mycompany.filebrowser.ItemFile"/>
+    <UseRelation source="com.mycompany.filebrowser.BrowserControler" target="com.mycompany.filebrowser.ItemFile" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation source="com.mycompany.filebrowser.ListUpdateEvent" target="com.mycompany.filebrowser.ItemFile" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <IsRelation name="is" source="com.mycompany.filebrowser.Folder" target="com.mycompany.filebrowser.ItemFile"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="com.mycompany.filebrowser.SizeSortingPlugin" target="com.mycompany.filebrowser.Sorting"/>
+    <UseRelation source="com.mycompany.filebrowser.FileService" target="com.mycompany.filebrowser.ItemFile" sourceCardinality="1..1" targetCardinality="1..1"/>
+  </ClassDiagramRelations>
+</ClassDiagram>
