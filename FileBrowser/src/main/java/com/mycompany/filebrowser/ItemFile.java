@@ -5,6 +5,7 @@
  */
 package com.mycompany.filebrowser;
 
+import java.nio.file.attribute.FileTime;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
@@ -14,10 +15,15 @@ import javafx.scene.image.Image;
  * @author florian
  */
 public abstract class ItemFile implements Comparable<ItemFile>{
+    /**
+     * Super class of the elements found in the folder
+     * 
+     */
     
     private String name;
     private String path;
     private BooleanProperty selectedProperty = new SimpleBooleanProperty();
+    private long size;
 
     public ItemFile(String name, String path,boolean isSelected) {
         this.name = name;
@@ -25,8 +31,7 @@ public abstract class ItemFile implements Comparable<ItemFile>{
         
         selectedProperty.setValue(isSelected);
         selectedProperty.addListener((obs,oldValue,newValue)->{
-            System.out.println("propety changed ");
-            System.out.println(obs.getValue());
+           
         
         });
     }
@@ -55,9 +60,16 @@ public abstract class ItemFile implements Comparable<ItemFile>{
 
     @Override
     public int compareTo(ItemFile o) {
+        /**
+         * Implementation of the interface Comparable
+         * it permite to compare Items by thier names
+         */
         return this.getName().compareTo(o.getName());
     }
     abstract Image getIcon();
+    abstract long getSize();
+    abstract public FileTime getDateModification();
+    
         
     
     

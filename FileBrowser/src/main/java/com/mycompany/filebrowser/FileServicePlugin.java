@@ -17,7 +17,9 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 import javafx.collections.ObservableList;
+import org.scijava.Prioritized;
 import org.scijava.event.EventService;
+import org.scijava.log.LogService;
 import org.scijava.plugin.Parameter;
 import org.scijava.plugin.Plugin;
 import org.scijava.service.AbstractService;
@@ -71,7 +73,14 @@ public class FileServicePlugin extends AbstractService implements FileService{
         *It add in the itemList only the image files and folders, and only non hidden elements.
         */
         if (item.isFile()&& (!item.isHidden())){
-            if (isImage(item))this.itemList.add(new ImageFile(item.getName(), item.getAbsolutePath(),false));
+            
+            if (isImage(item)){
+                    try {
+                    this.itemList.add(new ImageFile(item.getName(), item.getAbsolutePath(),false,Files.size(item.toPath()),Files.getLastModifiedTime(item.toPath())));
+                } catch (IOException ex) {
+                    Logger.getLogger(FileServicePlugin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
         else if (item.isDirectory()&& (!item.isHidden()))this.itemList.add(new Folder(item.getName(), item.getAbsolutePath(),false));
     }
@@ -99,6 +108,12 @@ public class FileServicePlugin extends AbstractService implements FileService{
 
     @Override
     public void searching(String entry) {
+        /**
+         * When called, we use a regular expression on the name of the items in the list
+         * this method use the regex library of java
+         * the research is case insansitive
+         * if there is nothing in the string in parameter, the whole folder is displayed
+         */
         final List<ItemFile> found = new ArrayList<>();
         if (!entry.equals("")){
             Pattern pattern = Pattern.compile(entry,Pattern.CASE_INSENSITIVE);
@@ -118,14 +133,14 @@ public class FileServicePlugin extends AbstractService implements FileService{
     
     @Override
     public void open(){
-        /*
+        /**
         * Method to be cald by the Controller
         * First it make a list of all selected items (on the view and so in the model)
         * Then it check if the item is a folder or an image.
         * If it's a folder, it launch the openFolder method, with the demanded path
         * if multiple folders are selected, the last one is opened
         * if it's an image, it call the linux program "eog" to open the image.
-        */
+        **/
          List<ItemFile> liste =itemList
                 .stream()
                 .filter(ch -> ch.isSelected())
@@ -147,18 +162,14 @@ public class FileServicePlugin extends AbstractService implements FileService{
         });
         
     }
-    /*
-    public void selection(ObservableList<String> names){
+    
+    public void selection(ObservableList<ItemFile> names){
        
-        List<ItemFile> liste =itemList
-                .stream()
-                .filter(ch -> ch.getName().equals(names))
-                .collect(Collectors.toList());
-        liste.forEach((ItemFile item) -> {
+        names.forEach((ItemFile item) -> {
             item.setSelected(!item.isSelected());
         });
     }
-*/
+
     public void up(){
         /*
         * Lauch openFolder, with the parent directory as parameter.
@@ -167,15 +178,6 @@ public class FileServicePlugin extends AbstractService implements FileService{
         
         openFolder(folder.getParent());
     }
-    /*
-    @Override
-    public void select(String name){
-        List<ItemFile> liste =itemList
-                .stream()
-                .filter(ch -> ch.getName().equals(names))
-                .collect(Collectors.toList());
-    }
-*/
 
     public List<ItemFile> getItemList() {
         return itemList;
@@ -183,6 +185,26 @@ public class FileServicePlugin extends AbstractService implements FileService{
 
     public String getCurrentRepository() {
         return currentRepository;
+    }
+
+   
+
+   
+    @Override
+    public String informations() {
+        String info = " ";
+    
+        List<ItemFile> selectedList= itemList
+                .stream()
+                .filter(ch -> ch.isSelected())
+                .collect(Collectors.toList());
+        for(ItemFile item : itemList) {
+            if (item.getClass().equals(ImageFile.class)){
+                info = info + " Name : " + item.getName() + " size : " + item.getSize() + " last Modification : " + item.getDateModification().toString()+ "\n";
+            }
+        
+        }
+    return info;
     }
     
     

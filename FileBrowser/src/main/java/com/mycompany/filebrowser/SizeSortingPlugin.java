@@ -5,8 +5,8 @@
  */
 package com.mycompany.filebrowser;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.scijava.event.EventService;
@@ -17,8 +17,13 @@ import org.scijava.plugin.Plugin;
  *
  * @author florian
  */
-@Plugin(type = Sorting.class, label = "Sort Alphabeticaly")
-public class AlphabeticSortingPlugin implements Sorting{
+@Plugin(type = Sorting.class, label = "Sort by size")
+public class SizeSortingPlugin implements Sorting{
+    /**
+     * sorting items by size
+     * using the size property of the object
+     * 
+     */
     @Parameter
     FileService fileService;
     @Parameter
@@ -26,13 +31,6 @@ public class AlphabeticSortingPlugin implements Sorting{
 
     @Override
     public void sort() {
-        /**
-         * Sorting the itemFiles by thier names.
-         * We use here the Collection.sort method thanks to the implementation of the Comparable interface in the ItemFile class
-         * 
-         * Folders are sorted first, then the images, like this, folders apeares first in the view
-         */
-        
         List<ItemFile> itemList = fileService.getItemList();
         List<ItemFile> list =itemList
                 .stream()
@@ -43,11 +41,21 @@ public class AlphabeticSortingPlugin implements Sorting{
                 .stream()
                 .filter(ch -> ch.getClass().equals(ImageFile.class))
                 .collect(Collectors.toList());
-        Collections.sort(imagelist);
+        // here we use Comparator, i don't really understand how it work, but at the end my objects are well sorted
+        Comparator<ItemFile> comparator = new Comparator<ItemFile>() {
+            @Override
+            public int compare(ItemFile left, ItemFile right) {
+                long result = left.getSize()- right.getSize();
+                return (int) result;
+            }
+        };
+        Collections.sort(imagelist,comparator);
         
         list.addAll(imagelist);
         
         eventService.publish(new ListUpdateEvent(list));
     }
+    
+    
     
 }

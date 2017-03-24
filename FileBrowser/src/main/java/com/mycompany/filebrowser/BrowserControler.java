@@ -9,29 +9,25 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.beans.property.Property;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToolBar;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.stage.WindowEvent;
+import javafx.scene.layout.Region;
 import org.scijava.Context;
 import org.scijava.InstantiableException;
 import org.scijava.SciJava;
@@ -47,17 +43,21 @@ import org.scijava.plugin.PluginService;
 public class BrowserControler extends AnchorPane{
     @Parameter
     FileService fileService;
+    /*
     @Parameter
     Sorting sorting;
+    */
      @Parameter
         Context context;
     
     @FXML
     private ListView<ItemFile> listView;
     @FXML
-    private ToolBar toolBar;
+    private MenuButton sortMenu;
     @FXML
     private TextField textField;
+    @FXML
+    private ContextMenu contextMenu;
     
 
     public BrowserControler() throws IOException {
@@ -75,7 +75,8 @@ public class BrowserControler extends AnchorPane{
         listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         listView.setCellFactory(this::createCell);
         SortingToolBar sortingBar = new SortingToolBar(context);
-        fileService.openFolder();
+        RightClickMenu rightClick = new RightClickMenu(context);
+        fileService.openFolder(); // at the initialization we display the content of home directory of the user
     }
 
      private ListCell<ItemFile> createCell (ListView<ItemFile> item){
@@ -83,10 +84,6 @@ public class BrowserControler extends AnchorPane{
     }
     
     
-    public void browseFile(){
-        // appel au service
-        // affichage sur la listView
-    }
     @FXML
     public void searchFile(){
         fileService.searching(textField.getText());
@@ -96,20 +93,41 @@ public class BrowserControler extends AnchorPane{
     public void up(){
         fileService.up();
     }
-    /*
+    
     @FXML
-    public void click(){
-        fileService.selection(listView.getSelectionModel().getSelectedItems());
+    public void click(MouseEvent mouseEvent){
+        
+        if(mouseEvent.getButton().equals(MouseButton.PRIMARY)){
+            if(mouseEvent.getClickCount() == 2){
+                
+                fileService.open();
+            }
+            else  {
+                fileService.selection(listView.getSelectionModel().getSelectedItems());
+            }
+        }
+           
+
+            
     }
-    */
+    
     @FXML
     public void open () throws IOException{
-        System.out.println("prout");
         fileService.open();
+    }
+    @FXML
+    public void properties () throws IOException{
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, fileService.informations());
+        alert.setResizable(true);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+         alert.showAndWait();
     }
     
     @EventHandler
     public void onUpdateEvent(ListUpdateEvent event){
+        /*
+        When the list of items is updated, we refresh the view
+        */
         Platform.runLater( () ->
         listView.getItems().removeAll(listView.getItems())
         );
@@ -129,13 +147,14 @@ public class BrowserControler extends AnchorPane{
         /*
         Ici on definis comment la vue doit afficher les tache, 
         */
-        HBox hbox;
+        HBox hbox; // each cell is a box contaning a checbox and an image
         CheckBox checkbox = new CheckBox();
        
 
         public FileListCell() {
             super();
             itemProperty().addListener(this::onItemChanged);
+            
             
         }
 
@@ -150,26 +169,27 @@ public class BrowserControler extends AnchorPane{
             }
             else {
                 
-                //Image depIcon =  new Image("file:folder.png",true);  
                 CheckBox checkbox = new CheckBox();
   
                 hbox = new HBox();  
   
-  
                 Pane pane = new Pane();  
                 pane.setMinWidth(5);  
 
-
-                hbox.getChildren().addAll(new ImageView(newValue.getIcon()), pane, checkbox);  
+                hbox.getChildren().addAll(new ImageView(newValue.getIcon()), pane, checkbox);  // we add to the box the elements that we want to display
                 newValue.selectedProperty().bindBidirectional(checkbox.selectedProperty());
                 checkbox.setText(newValue.getName());
+    
                 setGraphic(hbox);  
               
             }
         }
     }
     
-    public class SortingToolBar extends ToolBar{
+    public class SortingToolBar extends MenuButton{
+        /*
+        This class define the contenu of the menuButton, here we fill it with the plugins of type sorting
+        */
         
         @Parameter
         PluginService pluginService;
@@ -184,13 +204,13 @@ public class BrowserControler extends AnchorPane{
         public void addPlugin(PluginInfo<Sorting> pluginInfo) {
 
             try {
-                Button sortButton = new Button(pluginInfo.getLabel());
+                MenuItem sortButton = new MenuItem(pluginInfo.getLabel());
                 
                 Sorting plugin = pluginInfo.createInstance();
-                context.inject(plugin);
+                context.inject(plugin); // we need the service in the plugin, so we inject the context
                 
                 sortButton.setOnAction(ActionEvent -> applyPlugin(plugin));
-                toolBar.getItems().add(sortButton);
+                sortMenu.getItems().add(sortButton);
             } catch (InstantiableException ex) {
                 Logger.getLogger(BrowserControler.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -201,9 +221,37 @@ public class BrowserControler extends AnchorPane{
         }
     }
     
-    public class RightClickMenu extends ListView<ItemFile>{
-        ContextMenu contextMenu = new ContextMenu();
+    public class RightClickMenu extends ContextMenu{
+        /*
+        Same as SortingToolbar, but for the contextual menu ... yes it is useless ...
+        */
+        @Parameter
+        PluginService pluginService;
         
+        public RightClickMenu (Context context){
+            context.inject(this);
+            pluginService
+                    .getPluginsOfType(Sorting.class)
+                    .forEach(this::addPlugin);
+        }
+        public void addPlugin(PluginInfo<Sorting> pluginInfo) {
+
+            try {
+                MenuItem sortButton = new MenuItem(pluginInfo.getLabel());
+                
+                Sorting plugin = pluginInfo.createInstance();
+                context.inject(plugin);
+                
+                sortButton.setOnAction(ActionEvent -> applyPlugin(plugin));
+                contextMenu.getItems().add(sortButton);
+            } catch (InstantiableException ex) {
+                Logger.getLogger(BrowserControler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        public void applyPlugin(Sorting plugin){
+            plugin.sort();
+        }
         
     }
     

@@ -5,6 +5,7 @@
  */
 package com.mycompany.filebrowser;
 
+import java.nio.file.attribute.FileTime;
 import javafx.scene.image.Image;
 
 /**
@@ -12,11 +13,38 @@ import javafx.scene.image.Image;
  * @author florian
  */
 public class ImageFile extends ItemFile{
-    private Image icon =  new Image("file:image.png",32,32,false,false);
+    /**
+     * Images objects
+     * the atributes are the size (long) and the last modification date (FileTime)
+     */
+    private static Image icon =  new Image("file:image.png",32,32,false,false);
+    private long size;
+    private FileTime dateModification;
+
+    public long getSize() {
+        return size;
+    }
+
+    public FileTime getDateModification() {
+        return dateModification;
+    }
+
+    public String getPropeties() {
+        return propeties;
+    }
+    private String propeties;
+    
     
     public ImageFile(String name, String path,boolean isSelected) {
         super(name, path,isSelected);
     }
+
+    public ImageFile( String name, String path, boolean isSelected,long size, FileTime dateModification) {
+        super(name, path, isSelected);
+        this.size = size;
+        this.dateModification = dateModification;
+    }
+    
 
     public Image getIcon() {
         return icon;

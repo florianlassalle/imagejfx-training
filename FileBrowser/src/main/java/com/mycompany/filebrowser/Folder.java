@@ -5,6 +5,7 @@
  */
 package com.mycompany.filebrowser;
 
+import java.nio.file.attribute.FileTime;
 import javafx.scene.image.Image;
 
 /**
@@ -12,7 +13,10 @@ import javafx.scene.image.Image;
  * @author florian
  */
 public class Folder extends ItemFile{
-    private Image icon =  new Image("file:folder.png",32,0,false,false);
+    /**
+     * Object for the folders
+     */
+    private static Image icon =  new Image("file:folder.png",32,0,false,false);
     
     public Folder(String name, String path,boolean isSelected) {
         super(name, path,isSelected);
@@ -20,6 +24,16 @@ public class Folder extends ItemFile{
 
     public Image getIcon() {
         return icon;
+    }
+
+    @Override
+    long getSize() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public FileTime getDateModification() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
     
