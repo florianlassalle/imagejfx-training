@@ -1,0 +1,14 @@
+
+
+Some details about the functionalities that don't work very well:
+
+The double click work only if you don't click on the checkbox 
+The displaying of informations display the informations of the selected images (not folders, and not necessary the on on wich you clicked)
+
+generalities :
+
+The majority of the functions are in the FileServicePlugin service
+The folder and ImageFile class are not very well implemented, sorry about that
+
+I made an UML diagram if it can help you see more clearely
+
