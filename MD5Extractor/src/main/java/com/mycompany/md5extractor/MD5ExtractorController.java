@@ -122,6 +122,7 @@ public class MD5ExtractorController extends GridPane{
         progressBar.progressProperty().unbind();
         progressBar.setDisable(true);
         start.setText("Start");
+        start.setOnAction((ActionEvent event)-> start());
     }
     
     @FXML
