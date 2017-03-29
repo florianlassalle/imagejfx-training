@@ -10,6 +10,7 @@ import java.io.IOException;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -85,12 +86,11 @@ public class MD5ExtractorController extends GridPane{
         /*
         When the list of items is updated, we refresh the view
         */
-        progressBar.setVisible(true);
-        System.out.println(event.getTask().getMessage());
+       
         
        Platform.runLater( () ->
-            progressBar.progressProperty().bind(event.getTask().progressProperty()        
-            ));
+                    running(event)
+            );
        
     }
     @EventHandler
@@ -102,23 +102,33 @@ public class MD5ExtractorController extends GridPane{
         refresh()
         );
     }
-    @EventHandler
-    public void onRunningEvent(RunningEvent event){
-        /*
-        When the list of items is updated, we refresh the view
-        */
-        System.out.println("message recut");
+    
+    public void running(Md5InProgressEvent event){
         label.setVisible(true);
-        Platform.runLater( () ->
-        label.setText(event.getMessage())
-        );
+        label.textProperty().bind(event.getTask().messageProperty());
+        progressBar.setVisible(true);
+        progressBar.progressProperty().bind(event.getTask().progressProperty());
+        start.setDisable(false);
+        start.setText("Cancel");
+        start.setOnAction((ActionEvent eventbis) -> cancel());
     }
     
     public void refresh(){
         label.setVisible(true);
         select.setDisable(false);
         start.setDisable(false);
+        label.textProperty().unbind();
         label.setText("Done");
+        progressBar.progressProperty().unbind();
+        progressBar.setDisable(true);
+        start.setText("Start");
+    }
+    
+    @FXML
+    public void cancel(){
+        md5ServiceInteface.cancelTask();
+        refresh();
+        
     }
     
 }

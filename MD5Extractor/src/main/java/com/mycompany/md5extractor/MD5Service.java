@@ -33,6 +33,7 @@ public class MD5Service extends AbstractService implements MD5ServiceInteface{
     EventService eventService;
    
     private File directory;
+    private Task<Void> md5;
         
     @Override
     public void addFolder(File file) {
@@ -43,16 +44,13 @@ public class MD5Service extends AbstractService implements MD5ServiceInteface{
     @Override
     public void compileMD5() {
         List<File> files = getFilesFromFolder();
-        Task<Void> md5 = new MD5Calculator(files);
+        this.md5 = new MD5Calculator(files);
         
         eventService.publish(new Md5InProgressEvent(md5));
         
         
         new Thread(md5).start();
-        md5.setOnRunning((WorkerStateEvent event) -> {
-            eventService.publish(new RunningEvent(md5.getMessage()));
-        });
-        //md5.messageProperty().addListener(listener);
+       
         md5.setOnSucceeded((WorkerStateEvent event) -> {
             eventService.publish(new MD5EndingEvent());
             
@@ -89,6 +87,12 @@ public class MD5Service extends AbstractService implements MD5ServiceInteface{
         if (fileType.equals("image")) return true;
         else return false;
     }
+    
+    @Override
+    public void cancelTask(){
+        this.md5.cancel();
+    }
+    
 
     public String getDirectory() {
         return directory.getAbsolutePath();

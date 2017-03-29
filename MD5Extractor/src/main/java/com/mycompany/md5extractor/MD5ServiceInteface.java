@@ -16,4 +16,5 @@ public interface MD5ServiceInteface extends SciJavaService {
     public void addFolder(File file);
     public void compileMD5();
     public String getDirectory();
+    public void cancelTask();
 }
