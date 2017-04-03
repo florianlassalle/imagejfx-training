@@ -6,6 +6,7 @@
 package com.mycompany.foldercomparator;
 
 import java.io.File;
+import javafx.beans.value.ObservableValue;
 import org.scijava.service.SciJavaService;
 
 /**
@@ -13,6 +14,8 @@ import org.scijava.service.SciJavaService;
  * @author florian
  */
 public interface ComparatorServiceInterface extends SciJavaService{
-    public void setFolder(File directory,FieldType tpe);
+    public void setFolder(ObservableValue<File> directory,FieldType tpe);
+    public void synchroniseFolders();
+    public void cancelTask();
     
 }

@@ -36,8 +36,9 @@ import org.scijava.plugin.Parameter;
  * @author florian
  * 
  * to do :
- * inversion source/target
+ * 
  * moulinette pour traiter les dossiers
+ * 
  */
 public class ComparatorController extends GridPane{
     
@@ -62,7 +63,8 @@ public class ComparatorController extends GridPane{
     Label label;
     
     public static String CHANGE = "change folder";
-    
+    private FolderField sourceField;
+    private FolderField targetField;
     
 
     public ComparatorController() throws IOException {
@@ -76,13 +78,79 @@ public class ComparatorController extends GridPane{
         
         SciJava scijava = new SciJava();
         scijava.context().inject(this);
-        FolderField sourceField = new FolderField( context, FieldType.SOURCE);
-        FolderField targetField = new FolderField(context, FieldType.TARGET);
-        this.add(sourceField, 0, 0); // column=1 row=1
-        this.add(targetField, 0, 1); // column=1 row=1
+        sourceField = new FolderField( context, FieldType.SOURCE);
+        targetField = new FolderField(context, FieldType.TARGET);
+        this.add(sourceField, 0, 0); // column=0 row=0
+        this.add(targetField, 0, 2); // column=0 row=2
         
          
     }
+    
+    public void switchValues(){
+        System.out.println(sourceField.getTypeProperty().getValue());
+        if (sourceField.getTypeProperty().getValue().equals(FieldType.SOURCE)) {
+            sourceField.setTypeProperty(FieldType.TARGET);
+            targetField.setTypeProperty(FieldType.SOURCE);
+        } else {
+            sourceField.setTypeProperty(FieldType.SOURCE);
+            targetField.setTypeProperty(FieldType.TARGET);
+        }
+        
+    }
+    
+    public void startSynch(){
+        if (!sourceField.getFileProperty().equals(null) && !targetField.getFileProperty().equals(null)) {
+            comparatorServiceInterface.synchroniseFolders();
+        } else {
+        }
+        
+    }
+    
+    @EventHandler
+    public void onSynchProgressEvent(SynchroniserProgressEvent event){
+        Platform.runLater( () ->
+            running(event)
+        );
+
+    }
+    @EventHandler
+    public void onSynchEnddingEvent(SynchroniserEndEvent event){
+        /*
+        When the list of items is updated, we refresh the view
+        */
+        Platform.runLater( () ->
+        refresh()
+        );
+    }
+    
+    public void running(SynchroniserProgressEvent event){
+        label.setVisible(true);
+        label.textProperty().bind(event.getSynchroniser().messageProperty());
+        progressBar.setVisible(true);
+        progressBar.progressProperty().bind(event.getSynchroniser().progressProperty());
+        start.setDisable(false);
+        start.setText("Cancel");
+        start.setOnAction((ActionEvent eventbis) -> cancel());
+    }
+    
+    public void refresh(){
+        label.setVisible(true);
+        label.textProperty().unbind();
+        label.setText("Done");
+        progressBar.progressProperty().unbind();
+        progressBar.setDisable(true);
+        start.setText("Start");
+        start.setOnAction((ActionEvent event)-> startSynch());
+    }
+    
+    @FXML
+    public void cancel(){
+        comparatorServiceInterface.cancelTask();
+        refresh();
+        
+    }
+        
+        
     
     public class FolderField extends HBox{
         private String SELECT_FOLDER = "Select folder";
@@ -103,6 +171,7 @@ public class ComparatorController extends GridPane{
         private final ObservableValue<String> selectButtonText = Bindings.createStringBinding(this::getSelectButtonText, fileProperty);
         private final ObservableValue<String> textFieldText = Bindings.createStringBinding(this::getTextFieldText, fileProperty);
         private final ObservableValue<String> typeText = Bindings.createStringBinding(this::getTypeText, typeProperty);
+        private final ObservableValue<File> fileObservableValue = Bindings.createObjectBinding(this::getfileObservableValue, fileProperty);
 
         public FolderField(Context context, FieldType type) throws IOException {
             
@@ -120,11 +189,18 @@ public class ComparatorController extends GridPane{
             textField.textProperty().bind(textFieldText);
             
             label.textProperty().bind(typeText);
+            disablingButtons(true);
             
         }
         
+        public void disablingButtons(boolean disabling){
+            if (this.typeProperty.getValue().equals(FieldType.TARGET)) {
+                selectButton.setDisable(disabling);
+                textField.setDisable(disabling);
+            } 
+        }
+        
         public String getSelectButtonText (){
-            
             // if the file property is empty
             if (this.fileProperty.getValue() == null) {
                 return SELECT_FOLDER;
@@ -134,7 +210,6 @@ public class ComparatorController extends GridPane{
             }
         }
         public String getTextFieldText (){
-            
             // if the file property is empty
             if (this.fileProperty.getValue() == null) {
                 return SELECT_FOLDER;
@@ -143,8 +218,10 @@ public class ComparatorController extends GridPane{
                 return (this.fileProperty.getValue().getAbsolutePath());
             }
         }
+        public File getfileObservableValue (){
+            return this.fileProperty.getValue();
+        }
         public String getTypeText (){
-            System.out.println(typeProperty.getValue().toString());
             return this.typeProperty.getValue().toString();
            
         }
@@ -153,8 +230,9 @@ public class ComparatorController extends GridPane{
             DirectoryChooser chooser = new DirectoryChooser();
 
             File directory = chooser.showDialog(null);
+            this.fileProperty.set(directory);
             
-            comparatorServiceInterface.setFolder(directory, this.typeProperty.getValue());
+            comparatorServiceInterface.setFolder(this.fileObservableValue, this.typeProperty.getValue());
            
 
         }
@@ -162,16 +240,38 @@ public class ComparatorController extends GridPane{
         public void setTypeProperty(FieldType type){
             typeProperty.set(type);
         }
+
+        public ObjectProperty<FieldType> getTypeProperty() {
+            return typeProperty;
+        }
+
+        public ObjectProperty<File> getFileProperty() {
+            return fileProperty;
+        }
         
+        
+        /*
         @EventHandler
         public void onFolderChangesEvent(FolderChangesEvent event){
             if (event.getType().equals(this.typeProperty.getValue())) {
                 Platform.runLater( () ->
                     this.fileProperty.set(event.getFolder())
+                    
                     );
+                
                 
             }
             
+        }
+*/
+        @EventHandler
+        public void onFieldEnablingEvent(FieldEnabling event){
+            Platform.runLater( () ->
+                disablingButtons(!event.getEnabled())
+                    
+            );
+                
+                
             
         }
         
