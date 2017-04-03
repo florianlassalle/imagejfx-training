@@ -5,10 +5,14 @@
  */
 package com.mycompany.foldercomparator;
 
+import java.io.File;
+import org.scijava.service.SciJavaService;
+
 /**
  *
  * @author florian
  */
-public interface ComparatorServiceInterface {
+public interface ComparatorServiceInterface extends SciJavaService{
+    public void setFolder(File directory,FieldType tpe);
     
 }
