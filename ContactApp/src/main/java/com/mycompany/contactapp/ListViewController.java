@@ -70,19 +70,8 @@ public class ListViewController extends ListView<Contact> implements ViewControl
     }
 
     @Override
-    public void openContact() {
-        Contact contact =this.getSelectionModel().getSelectedItem();
-        try {
-            ContactViewController contactView = new ContactViewController(contact);
-            Stage newStage = new Stage();
-            context.inject(contactView);
-            contactView.init();
-            Scene scene = new Scene(contactView);
-            newStage.setScene(scene);
-            newStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(ContactMainView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public Contact openContact() {
+        return this.getSelectionModel().getSelectedItem();
     }
 
     @Override
@@ -118,7 +107,6 @@ public class ListViewController extends ListView<Contact> implements ViewControl
                 
                 Label nameLabel = new Label();
                 Label emailLabel = new Label();
-                
                 
                 hbox = new HBox();  
   

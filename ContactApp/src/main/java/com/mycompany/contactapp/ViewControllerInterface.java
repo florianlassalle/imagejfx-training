@@ -18,7 +18,7 @@ public interface ViewControllerInterface extends SciJavaPlugin {
 
     void show();
     public void addContact();
-    public void openContact();
+    public Contact openContact();
     public void newContactNotification(String name);
     
 }

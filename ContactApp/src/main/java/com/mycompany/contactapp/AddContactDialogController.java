@@ -5,11 +5,16 @@
  */
 package com.mycompany.contactapp;
 
+import java.io.File;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.scijava.plugin.Parameter;
 
 /**
  *
@@ -24,11 +29,14 @@ public class AddContactDialogController extends GridPane{
     TextField image;
     @FXML
     TextField description;
+    @Parameter
+    Stage stage;
     
     private String stringName;
     private String stringEmail;
     private String stringDescription;
     private String stringImage;
+    //private Stage stage;
     
     public AddContactDialogController() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -66,6 +74,16 @@ public class AddContactDialogController extends GridPane{
     }
     @FXML
     public void setImage(){
+        
+        
         this.stringImage = this.image.getText();
     }
+    @FXML
+    public void browseImage(){
+         FileChooser chooser = new FileChooser();
+
+        File image = chooser.showOpenDialog(stage);
+        this.stringImage = image.getAbsolutePath();
+    }
+   
 }

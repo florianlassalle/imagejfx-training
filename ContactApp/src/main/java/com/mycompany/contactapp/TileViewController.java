@@ -89,19 +89,8 @@ public class TileViewController extends TilePane implements ViewControllerInterf
     }
 
     @Override
-    public void openContact() {
-        
-        try {
-            ContactViewController contactView = new ContactViewController(this.currentContact);
-            Stage newStage = new Stage();
-            context.inject(contactView);
-            contactView.init();
-            Scene scene = new Scene(contactView);
-            newStage.setScene(scene);
-            newStage.show();
-        } catch (IOException ex) {
-            Logger.getLogger(ContactMainView.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public Contact openContact() {
+        return this.currentContact;
 
     }
 

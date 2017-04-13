@@ -60,7 +60,7 @@ public class ViewController extends Application implements ViewControllerInterfa
         
         // creating the scene
         Scene scene = new Scene(listView);
-
+        //scene.getStylesheets().add("/styles/googleStyleSheet.css");
         // setting the scene to the stage
         primaryStage.setScene(scene);
         
@@ -101,7 +101,7 @@ public class ViewController extends Application implements ViewControllerInterfa
     }
 
     @Override
-    public void openContact() {
+    public Contact openContact() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

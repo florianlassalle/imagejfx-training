@@ -28,6 +28,9 @@ import org.scijava.plugin.Parameter;
 /**
  *
  * @author florian
+ * 
+ * This is the main view controller, it control the views, the buttons etc ...
+ * it call the two others controllers for the display of the contacts, the list view or the tilePane
  */
 
 public class ContactMainView extends AnchorPane implements ViewControllerInterface{
@@ -84,13 +87,16 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
     }
     
     public List<String> createDialog(){
+        /*
+        Dialog window creation, display it and get the result as an array list
+        */
         Node addContactNode = null;
         // Create the custom dialog.
         Dialog<List<String>> dialog = new Dialog<>();
         dialog.setTitle("Add Contact");
         dialog.setHeaderText("Fill the informations for the new contact");
         // Set the button types.
-        ButtonType loginButtonType = new ButtonType("Login", ButtonData.OK_DONE);
+        ButtonType loginButtonType = new ButtonType("Save changes", ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(loginButtonType, ButtonType.CANCEL);
         try {
             addContactNode = new AddContactDialogController();
@@ -115,10 +121,29 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
         Optional<List<String>> result = dialog.showAndWait();
         return result.get();
     }
+    
+    public void ContactViewMaker(Contact contact){
+        Node addContactNode = null;
+        // Create the custom dialog.
+        Dialog dialog = new Dialog();
+        dialog.setTitle(contact.getName());
+        // Set the button types.
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.CANCEL);
+        try {
+            addContactNode = new ContactViewController(contact);
+        } catch (IOException ex) {
+            Logger.getLogger(ContactMainView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dialog.getDialogPane().setContent(addContactNode);
+        
+        dialog.showAndWait();
+    }
 
     @Override
-    public void openContact() {
-        this.currentNode.openContact();
+    public Contact openContact() {
+        Contact contact = this.currentNode.openContact();
+        ContactViewMaker(contact);
+        return contact;
     }
     
     public void openLittleWindow() throws IOException{
@@ -141,6 +166,10 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
 
     @Override
     public void newContactNotification(String name) {
+        /*
+        trying to display a notification when a contact is added
+        don't work very well, the notification apear in the top right corner of the screen, not in the window
+        */
         Label message = new Label("New contact added : " +name);
         Popup popup = new Popup();
         popup.getContent().add(message);
