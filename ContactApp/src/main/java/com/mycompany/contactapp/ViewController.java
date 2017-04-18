@@ -10,6 +10,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
@@ -29,7 +32,7 @@ public class ViewController extends Application implements ViewControllerInterfa
     @Parameter
     static private Context context;
     static private ContactMainView listView;
-    
+    private final DoubleProperty windowProperty = new SimpleDoubleProperty();
     
     @Parameter
     ContactViewServiceInterface contactViewService;
@@ -110,6 +113,9 @@ public class ViewController extends Application implements ViewControllerInterfa
         listView.newContactNotification(name);
     }
     
+    public void changeWindow(){
+        
+    }
     
    
 }

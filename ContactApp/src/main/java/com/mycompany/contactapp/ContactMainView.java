@@ -45,6 +45,8 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
     Stage stage;
     
     private ViewControllerInterface currentNode ;
+    private Node viewList;
+    private Node tilePane;
      
     public ContactMainView() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -52,14 +54,20 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
         loader.setRoot(this);       //root est la base de la page, ici anchorPane
         loader.setController(this); //definition du controlleur
         loader.load(); // generation de la fenetre.
-        
+         
     }
     
 
     @Override
     public void init() {
+       
+        
         if (this.currentNode == null){
             try {
+                 this.viewList = new ListViewController();
+                context.inject(viewList);
+                this.tilePane= new TileViewController();
+                context.inject(this.tilePane);
                 openLittleWindow();
             } catch (IOException ex) {
                 Logger.getLogger(ContactMainView.class.getName()).log(Level.SEVERE, null, ex);
@@ -147,20 +155,18 @@ public class ContactMainView extends AnchorPane implements ViewControllerInterfa
     }
     
     public void openLittleWindow() throws IOException{
-        Node contactListView = new ListViewController();
-        context.inject(contactListView);
+        
         grid.getChildren().remove(this.currentNode);
         
-        grid.add(contactListView,0,2);
-        this.currentNode = (ViewControllerInterface) contactListView;
+        grid.add(this.viewList,0,2);
+        this.currentNode = (ViewControllerInterface) this.viewList;
         refresh();
     }
     public void openLargeWindow() throws IOException{
-        Node contactTileView = new TileViewController();
-        context.inject(contactTileView);
+       
         grid.getChildren().remove(this.currentNode);        
-        grid.add(contactTileView,0,2);
-        this.currentNode = (ViewControllerInterface) contactTileView;
+        grid.add(this.tilePane,0,2);
+        this.currentNode = (ViewControllerInterface) this.tilePane;
         refresh();
     }
 

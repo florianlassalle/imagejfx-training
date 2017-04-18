@@ -49,6 +49,7 @@ public class TileViewController extends TilePane implements ViewControllerInterf
 
     @Override
     public void refresh() {
+        this.getChildren().clear();
         contactViewService.getContactList()
                 .stream()
                 .forEach((contact) -> {
@@ -73,7 +74,7 @@ public class TileViewController extends TilePane implements ViewControllerInterf
         icon.setPreserveRatio(true);
         icon.setSmooth(true);
         icon.setCache(true);
-        vBox.getChildren().addAll(new ImageView(contact.getIcon()),new Label(contact.getName()), new Label(contact.getEmail())); 
+        vBox.getChildren().addAll(icon,new Label(contact.getName()), new Label(contact.getEmail())); 
         vBox.setAlignment(Pos.CENTER);
         vBox.setMinSize(USE_PREF_SIZE, USE_PREF_SIZE);
         vBox.setOnMouseClicked(ActionEvent -> openThisContact(contact));
