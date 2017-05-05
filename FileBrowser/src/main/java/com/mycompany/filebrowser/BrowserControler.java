@@ -124,7 +124,7 @@ public class BrowserControler extends AnchorPane{
     }
     
     @EventHandler
-    public void onUpdateEvent(ListUpdateEvent event){
+    public void onProgressEvent(ListUpdateEvent event){
         /*
         When the list of items is updated, we refresh the view
         */

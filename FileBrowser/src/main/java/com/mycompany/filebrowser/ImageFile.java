@@ -17,7 +17,7 @@ public class ImageFile extends ItemFile{
      * Images objects
      * the atributes are the size (long) and the last modification date (FileTime)
      */
-    private static Image icon =  new Image("file:image.png",32,32,false,false);
+    private static Image icon =  new Image("image.png");
     private long size;
     private FileTime dateModification;
 

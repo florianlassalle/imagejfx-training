@@ -28,12 +28,12 @@ public class CompartorService extends AbstractService implements ComparatorServi
     @Parameter
     EventService eventService;
     
-    private ObservableValue<File>  sourceDirectory;
-    private ObservableValue<File> targetDirectory;
+    private File  sourceDirectory;
+    private File targetDirectory;
     private Task<Void> synchroniser;
 
     @Override
-    public void setFolder(ObservableValue<File> directory, FieldType type) {
+    public void setFolder(File directory, FieldType type) {
         if (type.equals(FieldType.SOURCE)) {
             this.sourceDirectory = directory;
             
@@ -43,12 +43,13 @@ public class CompartorService extends AbstractService implements ComparatorServi
         }
         
         eventService.publish(new FieldEnabling(true));
+        eventService.publish(new FolderChangesEvent(sourceDirectory,type));
     }
     
     @Override
     public void synchroniseFolders() {
         
-        this.synchroniser = new FolderSynchroniser(this.sourceDirectory.getValue(),this.targetDirectory.getValue());
+        this.synchroniser = new FolderSynchroniser(this.sourceDirectory,this.targetDirectory);
         
         eventService.publish(new SynchroniserProgressEvent(synchroniser));
         
@@ -64,4 +65,15 @@ public class CompartorService extends AbstractService implements ComparatorServi
         this.synchroniser.cancel();
     }
     
+    @Override
+    public void switchFolders(){
+        File  sourceDirectoryTmp = this.sourceDirectory;
+        this.sourceDirectory = this.targetDirectory;
+        this.targetDirectory = sourceDirectoryTmp;
+        
+        eventService.publish(new FolderChangesEvent(sourceDirectory,FieldType.SOURCE));
+        eventService.publish(new FolderChangesEvent(targetDirectory,FieldType.TARGET));
+        
+        
+    }
 }
